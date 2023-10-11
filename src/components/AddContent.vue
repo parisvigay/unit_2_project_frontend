@@ -33,11 +33,11 @@
                         <svg id="closeBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16" @click="closeArtist">
                         <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
                         </svg>
-                        <button id="submitBtn">Submit</button>   
+                        <button id="submitBtn" @click="submitArtist">Submit</button>   
                         </div>
                         <input id="input" type="text" v-model="artist.name" name="title" placeholder="Name" required>
                         <input id="input" type="text" v-model="artist.genre" name="artist" placeholder="Genre/s" required>
-                        <input id="input" type="text" v-model="artist.active" name="active" placeholder="Active? (y/n)" required>
+                        <input id="input" type="text" v-model="artist.active" name="active" placeholder="Active? (Yes/No)" required>
                         <input id="lastInput" type="text" v-model="artist.image" name="image" placeholder="(Image URL)" required>
                     </section>
                 </form>
@@ -70,7 +70,9 @@
 
 const titleOrNameRegex = /\w\s*/;
 const yearRegex = /\d{4,4}/;
-const genreRegex = /^[A-Za-z\s,]*$/;
+const genreRegex = /^[A-Za-z\s,&]*$/;
+const activeRegex = /[Yy]es|[Nn]o/;
+const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
 
     export default {
         name: 'AddContent',
@@ -149,11 +151,12 @@ const genreRegex = /^[A-Za-z\s,]*$/;
                         genre: this.song.genre
                     })
                 })
+                this.closeSong();
                 const contentH1 = document.getElementById('addContentTitle');
                 contentH1.innerHTML = "You've shared a song!";
                 setTimeout(() => {
                     contentH1.innerHTML = "Recommend others some music!";
-                }, 5000);
+                }, 4000);
                 this.resetForm();
             },
             resetForm: function() {
@@ -175,6 +178,48 @@ const genreRegex = /^[A-Za-z\s,]*$/;
                     year: '',
                     genre: '',
                 };
+            },
+            submitArtist: function (e) {
+                e.preventDefault()
+                if (this.artist.name==='' || this.artist.genre==='' || this.artist.active==='' || this.artist.image==='') {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
+                if (!titleOrNameRegex.test(this.artist.name)) {
+                    alert("Please input a valid name");
+                    return;
+                }
+                if (!genreRegex.test(this.artist.genre)) {
+                    alert("Please input a valid genre");
+                    return;
+                }
+                if (!activeRegex.test(this.artist.active)) {
+                    alert("Please input a valid answer");
+                    return;
+                }
+                if (!imageRegex.test(this.artist.image)) {
+                    alert("Please input a valid image URL");
+                    return;
+                }
+                fetch('http://localhost:4000/add/artist', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: this.artist.name,
+                        genre: this.artist.genre,
+                        active: this.artist.active,
+                        image: this.artist.image
+                    })
+                })
+                this.closeArtist();
+                const contentH1 = document.getElementById('addContentTitle');
+                contentH1.innerHTML = "You've shared an artist!";
+                setTimeout(() => {
+                    contentH1.innerHTML = "Recommend others some music!";
+                }, 4000);
+                this.resetForm();
             },
             submitAlbum: function (e) {
                 e.preventDefault()
@@ -210,13 +255,14 @@ const genreRegex = /^[A-Za-z\s,]*$/;
                         genre: this.album.genre
                     })
                 })
+                this.closeAlbum();
                 const contentH1 = document.getElementById('addContentTitle');
                 contentH1.innerHTML = "You've shared an album!";
                 setTimeout(() => {
                     contentH1.innerHTML = "Recommend others some music!";
-                }, 5000);
+                }, 4000);
                 this.resetForm();
-            },
+            }
         }
     }
         
@@ -248,7 +294,8 @@ div#contentContainer {
     background-color: #EADDCA;
     height: 30vmin;
     width: 30vmin;
-    box-shadow: 1vmin 1vmin #355E3B;
+    border-radius: 2.5%;
+    box-shadow: 1vmin 1vmin #076154;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -263,7 +310,7 @@ div#contentContainer {
 }
 
 #uploadBtn:hover {
-    color: #355E3B;
+    color: #076154;
     transform: scale(1.05);
 }
 

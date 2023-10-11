@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 import NavView from '../components/NavView'
 import HomeView from '../components/HomeView'
 import AddContent from '../components/AddContent'
+import ProfileView from '../components/ProfileView'
 
 const routes = [
     {
@@ -18,6 +19,11 @@ const routes = [
         name: 'AddContent',
         path: '/home/add-content',
         component: AddContent
+    },
+    {
+        name: 'ProfileView',
+        path: '/home/profile',
+        component: ProfileView
     }
 ]
 const router = createRouter({
