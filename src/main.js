@@ -1,28 +1,22 @@
-// import Vue from 'vue'
-// import App from './App.vue'
-// import router from './router'
-// import { createApp } from 'vue'
-// import BootstrapVue from 'bootstrap-vue'
-// import { IconsPlugin } from 'bootstrap-vue';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-// Vue.use(BootstrapVue);
-// Vue.use(IconsPlugin);
-
-// Vue.use(router);
-
-// createApp(App).mount('#app')
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import 'jquery'; 
 import 'bootstrap/dist/css/bootstrap.css';
 import './css/GlobalStyle.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-// const app = createApp(App)
+import vue3GoogleLogin from 'vue3-google-login'
+import Vue3Cookies from "vue3-cookies";
 
-// app.use(router)
+const app = createApp(App)
 
-// app.mount('#app')
-createApp(App).use(router).mount('#app')
+app.use(router) // Use Vue Router
+app.use(vue3GoogleLogin, { clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID }) // Use Google OAuth
+app.use(Vue3Cookies, {
+  expireTime: "1d",
+  path: '/',
+  domain: '',
+  secure: true,
+  sameSite: 'None'
+})
+
+
+app.mount('#app')

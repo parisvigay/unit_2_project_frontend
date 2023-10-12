@@ -3,6 +3,7 @@ import NavView from '../components/NavView'
 import HomeView from '../components/HomeView'
 import AddContent from '../components/AddContent'
 import ProfileView from '../components/ProfileView'
+import SocialView from '../components/SocialView'
 
 const routes = [
     {
@@ -24,7 +25,11 @@ const routes = [
         name: 'ProfileView',
         path: '/home/profile',
         component: ProfileView
-    }
+    },
+    {   name: 'SocialView',
+        path: '/home/social',
+        component: SocialView
+    }      
 ]
 const router = createRouter({
 	history: createWebHistory(),

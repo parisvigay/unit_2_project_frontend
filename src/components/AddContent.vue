@@ -1,5 +1,9 @@
 <template>
     <div id="contentMain">
+        <svg id="backToHome" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" @click="toHome">
+        <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+        <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+        </svg>
         <h1 id="addContentTitle">Recommend others some music!</h1>
         <div id="contentContainer">
             <div id="addSong" class="addA">Song
@@ -262,9 +266,12 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                     contentH1.innerHTML = "Recommend others some music!";
                 }, 4000);
                 this.resetForm();
-            }
+            },
+            toHome: function() {
+            this.$router.push('/home');
         }
     }
+}
         
 </script>
 
@@ -292,15 +299,16 @@ div#contentContainer {
     font-size: 4vmin;
     color: #097969;
     background-color: #EADDCA;
-    height: 30vmin;
+    height: 32vmin;
     width: 30vmin;
     border-radius: 2.5%;
+    border: 0.5vmin solid #2c3e50;
     box-shadow: 1vmin 1vmin #076154;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    /* text-shadow: 0.1vmin 0.1vmin #355E3B; */
+    /* text-shadow: 0.25vmin 0.25vmin seashell; */
 }
 
 #uploadBtn {    
@@ -346,7 +354,8 @@ input {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 0.25vmin;
+    margin-bottom: 1vmin;
+    margin-top: 1vmin;
 }
 
 #submitBtn {
@@ -364,14 +373,32 @@ input {
 
 #input {
     font-size: 2.5vmin;
+    width: 28vmin;
 }
 
 #lastInput {
     margin-bottom: 7vmin;
     font-size: 2.5vmin;
+    width: 28vmin;
 }
 
 input::placeholder {
     font-size: 2.5vmin;
+}
+
+#backToHome {
+    align-self: flex-end;
+    margin-left: 4vmin;
+    position: absolute;
+    top: 2.5vmin;
+    left: -1.5vmin;
+    height: 7vmin;
+    width: 7vmin;
+    color: #EADDCA;
+}
+
+#backToHome:hover {
+    color: #dec9ab;
+    transform: scale(1.05);
 }
 </style>

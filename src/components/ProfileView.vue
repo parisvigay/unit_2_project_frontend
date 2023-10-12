@@ -1,5 +1,9 @@
 <template>
     <div id="profileMain">
+        <svg id="backToHome" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" @click="toHome">
+        <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+        <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+        </svg>
         <div id="profileCard">
             <div id="profileIcon">
                 <div id="profileCircle">
@@ -10,19 +14,34 @@
             </div>
             <div id="profileName">
                 <div id="profileNameCard">
-                    <p id="profileNameText">(User)</p>
+                    <p id="profileNameText">{{ userName }}</p>
                 </div>
             </div>
             <div id="infoCardContainer">
                 <div id="fav" class="infoCard">
-                    <p id="favSong" class="favourites">Favourite Song:</p>
-                    <p id="favArtist" class="favourites">Favourite Artist:</p>
-                    <p id="favAlbum" class="favourites">Favourite Album:</p>
+                    <p id="favSong" class="favourites toolTip">Favourite Song:
+                       <span class="toolTipText">Let others know your favourite song!</span>
+                    </p>
+                    <p id="favArtist" class="favourites toolTip">Favourite Artist:
+                        <span class="toolTipText">Let others know your favourite Artist!</span>
+                    </p>
+                    <p id="favAlbum" class="favourites toolTip">Favourite Album:
+                        <span class="toolTipText">Let others know your favourite Album!</span>
+                    </p>
                 </div>
                 <div id="answer" class="infoCard">
-                    <p id="answerSong" class="answers">(User fav song)</p>
-                    <p id="answerArtist" class="answers">(User fav artist)</p>
-                    <p id="answerAlbum" class="answers">(User fav album)</p>
+                    <div class="answerContainer">
+                    <p id="answerSong" class="answers">User fav song</p>
+                    <button class="editBtn">Edit</button>
+                    </div>
+                    <div class="answerContainer">
+                    <p id="answerArtist" class="answers">User fav artist</p>
+                    <button class="editBtn">Edit</button>
+                    </div>
+                    <div class="answerContainer">
+                    <p id="answerAlbum" class="answers">User fav album</p>
+                    <button class="editBtn">Edit</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,28 +49,44 @@
 </template>
 
 <script>
-    
+import { decodeCredential } from 'vue3-google-login'    
+
     export default {
   name: 'ProfileView',
+  data: () => ({
+      isInit: false,
+      isLoggedIn: false,
+      userName: '',
+      emailAddress: ''
+    }),
+    mounted() {
+      if (this.$cookies.isKey('user_session')) {
+        this.isLoggedIn = true
+        const userData = decodeCredential(this.$cookies.get('user_session'))
+        this.userName = userData.given_name
+      }
+    },
+    methods: {
+            toHome: function() {
+            this.$router.push('/home');
+        }
+    } 
 };
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Arimo:wght@500&family=Dela+Gothic+One&family=Kanit&family=Open+Sans:wght@300&family=Oswald:wght@500&family=Poiret+One&family=Poppins&display=swap');
 
 #profileCard {
     height: 93vmin;
     width: 62vmin;
     border-radius: 2.5%;
-    border: 0.5vmin solid #4e3b1f;
+    border: 0.5vmin solid #2c3e50;
     background-color: #EADDCA;
     box-shadow: 1.25vmin 1.25vmin #076154;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    font-family: Arimo;
-
 }
 
 #profileName {
@@ -114,26 +149,33 @@
     margin-bottom: 6vmin;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    text-align: center;
 }
 
 #fav {
-    background-color: #e0cdb1;
-    border-top: 0.5vmin solid #4e3b1f;
-    border-left: 0.5vmin solid #4e3b1f;
-    border-bottom: 0.5vmin solid #4e3b1f;
+    background-color: #e5d3bb;
+    border-top: 0.5vmin solid #2c3e50;
+    border-left: 0.5vmin solid #2c3e50;
+    border-bottom: 0.5vmin solid #2c3e50;
     border-top-left-radius: 2.5%;
     border-bottom-left-radius: 2.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 #answer {
-    background-color: #e4d3ba;
-    border-top: 0.5vmin solid #4e3b1f;
-    border-right: 0.5vmin solid #4e3b1f;
-    border-bottom: 0.5vmin solid #4e3b1f;
+    background-color: #e7d7c1;
+    border-top: 0.5vmin solid #2c3e50;
+    border-right: 0.5vmin solid #2c3e50;
+    border-bottom: 0.5vmin solid #2c3e50;
     border-top-right-radius: 2.5%;
     border-bottom-right-radius: 2.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .favourites {
@@ -144,19 +186,68 @@
     font-size: 2.5vmin;
 }
 
-#favSong {
-    margin-top: 4vmin;
+.toolTip {
+  position: relative;
+  display: inline-block;
 }
 
-#favAlbum {
-    margin-bottom: 4vmin;
+.toolTip:hover .toolTipText {
+  visibility: visible;
+  opacity: 1;
 }
 
-#answerSong {
-    margin-top: 4vmin;
+.toolTip .toolTipText {
+  visibility: hidden;
+  width: 16vmin;
+  height: 5vmin;
+  font-size: 1.5vmin;
+  background-color: lightyellow;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  border: 0.25vmin solid #2c3e50;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -25vmin;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-#answerAlbum {
-    margin-bottom: 4vmin;
+.answerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.editBtn {
+    height: 3vmin;
+    width: 4.5vmin;
+    font-size: 1.5vmin;
+    margin-top: 10vmin;
+    background-color: seashell;
+    position: absolute;
+}
+
+.editBtn:hover {
+    background-color: lightyellow;
+    transform: scale(1.05);
+}
+
+#backToHome {
+    align-self: flex-end;
+    margin-left: 4vmin;
+    position: absolute;
+    top: 2.5vmin;
+    left: -1.5vmin;
+    height: 7vmin;
+    width: 7vmin;
+    color: #EADDCA;
+}
+
+#backToHome:hover {
+    color: #dec9ab;
+    transform: scale(1.05);
 }
 </style>
