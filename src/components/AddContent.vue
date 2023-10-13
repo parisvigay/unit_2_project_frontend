@@ -76,7 +76,9 @@ const titleOrNameRegex = /\w\s*/;
 const yearRegex = /\d{4,4}/;
 const genreRegex = /^[A-Za-z\s,&]*$/;
 const activeRegex = /[Yy]es|[Nn]o/;
-const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
+// const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
+
+import { decodeCredential } from 'vue3-google-login'
 
     export default {
         name: 'AddContent',
@@ -99,8 +101,17 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                 artist: '',
                 year: '',
                 genre: ''
-            }
-        }),
+            },
+            emailAddress: ''
+        }), 
+        mounted() {
+        if (this.$cookies.isKey('user_session')) {
+        this.isLoggedIn = true
+        const userData = decodeCredential(this.$cookies.get('user_session'))
+        this.userName = userData.given_name
+        this.emailAddress = userData.email
+      }
+    },
         methods: {
             addSong: function() {
                 document.getElementById('submitSong').style.display=('block')
@@ -120,7 +131,6 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
             closeAlbum: function() {
                 document.getElementById('submitAlbum').style.display=('none')
             },
-            
             submitSong: function (e) {
                 e.preventDefault()
                 if (this.song.title==='' || this.song.artist==='' || this.song.year==='' || this.song.genre==='') {
@@ -152,7 +162,8 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                         title: this.song.title,
                         artist: this.song.artist,
                         year: this.song.year,
-                        genre: this.song.genre
+                        genre: this.song.genre,
+                        emailAddress: this.emailAddress
                     })
                 })
                 this.closeSong();
@@ -201,10 +212,10 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                     alert("Please input a valid answer");
                     return;
                 }
-                if (!imageRegex.test(this.artist.image)) {
-                    alert("Please input a valid image URL");
-                    return;
-                }
+                // if (!imageRegex.test(this.artist.image)) {
+                //     alert("Please input a valid image URL");
+                //     return;
+                // }
                 fetch('http://localhost:4000/add/artist', {
                     method: "POST",
                     headers: {
@@ -214,7 +225,8 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                         name: this.artist.name,
                         genre: this.artist.genre,
                         active: this.artist.active,
-                        image: this.artist.image
+                        image: this.artist.image,
+                        emailAddress: this.emailAddress
                     })
                 })
                 this.closeArtist();
@@ -256,7 +268,8 @@ const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
                         title: this.album.title,
                         artist: this.album.artist,
                         year: this.album.year,
-                        genre: this.album.genre
+                        genre: this.album.genre,
+                        emailAddress: this.emailAddress
                     })
                 })
                 this.closeAlbum();

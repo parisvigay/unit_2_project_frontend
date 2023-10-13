@@ -21,35 +21,63 @@
                 <div id="fav" class="infoCard">
                     <p id="favSong" class="favourites toolTip">Favourite Song:
                        <span class="toolTipText">Let others know your favourite song!</span>
+                       {{ getFavourite.song }}
                     </p>
                     <p id="favArtist" class="favourites toolTip">Favourite Artist:
                         <span class="toolTipText">Let others know your favourite Artist!</span>
+                        {{ getFavourite.artist }}
                     </p>
                     <p id="favAlbum" class="favourites toolTip">Favourite Album:
                         <span class="toolTipText">Let others know your favourite Album!</span>
+                        {{ getFavourite.album }}
                     </p>
                 </div>
-                <div id="answer" class="infoCard">
-                    <div class="answerContainer">
+                <!-- <div id="answer" class="infoCard">
+                    <div id="answerSongContainer" class="answerContainer">
                     <p id="answerSong" class="answers">User fav song</p>
-                    <button class="editBtn">Edit</button>
+                    <button class="editBtn" @click="addSong">Edit</button>
                     </div>
-                    <div class="answerContainer">
+                    <input id="songInput" class="inputs" type="text" v-model="favouriteSong.song" name="song" placeholder="Favourite song" required>
+                    <div id="answerArtistContainer" class="answerContainer">
                     <p id="answerArtist" class="answers">User fav artist</p>
-                    <button class="editBtn">Edit</button>
+                    <button class="editBtn" @click="addArtist">Edit</button>
                     </div>
-                    <div class="answerContainer">
+                    <input id="artistInput" class="inputs" type="text" v-model="favouriteArtist.artist" name="artist" placeholder="Favourite artist" required>
+                    <div id="answerAlbumContainer" class="answerContainer">
                     <p id="answerAlbum" class="answers">User fav album</p>
-                    <button class="editBtn">Edit</button>
+                    <button class="editBtn" @click="addAlbum">Edit</button>
                     </div>
+                    <input id="albumInput" class="inputs" type="text" v-model="favouriteAlbum.album" name="album" placeholder="Favourite album" required>
+                -->
+                <div id="addFavs" class="addAFav">Favourite
+                    <svg id="uploadBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16" @click="addAlbum">
+                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    <form id="submitFavs">
+                    <section id="inputs">
+                        <div id="closeAndSubmit">
+                        <svg id="closeBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16" @click="closeAlbum">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                        </svg>
+                        <button id="submitBtn" type="submit" @click="submitFav">Submit</button>  
+                        </div>
+                        <input id="input" type="text" v-model="favourite.song" name="song" placeholder="Song" required>
+                        <input id="input" type="text" v-model="favourite.artist" name="artist" placeholder="Artist" required>
+                        <input id="input" type="text" v-model="favourite.album" name="album" placeholder="Album" required>
+                    </section>
+                </form>
+            </div>
                 </div>
             </div>
         </div>
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
-import { decodeCredential } from 'vue3-google-login'    
+import { decodeCredential } from 'vue3-google-login'
+
+// const inputRegex = /\w\s*/;    
 
     export default {
   name: 'ProfileView',
@@ -57,20 +85,61 @@ import { decodeCredential } from 'vue3-google-login'
       isInit: false,
       isLoggedIn: false,
       userName: '',
-      emailAddress: ''
+      emailAddress: '',
+      favourite: {
+        artist: '',
+        song: '',
+        album: ''
+      },
+      getFavourite: {}
     }),
     mounted() {
       if (this.$cookies.isKey('user_session')) {
         this.isLoggedIn = true
         const userData = decodeCredential(this.$cookies.get('user_session'))
         this.userName = userData.given_name
+        this.emailAddress = userData.email
       }
+      fetch ('http://localhost:4000/favourites')
+      .then(res => res.json())
+      .then(result => {
+        console.log(result[0]);
+        this.getFavourite=result[0]
+      })
     },
     methods: {
-            toHome: function() {
-            this.$router.push('/home');
+        toHome: function() {
+        this.$router.push('/home');
+        },
+        addFav: function() {
+            document.getElementById('answerSongContainer').style.opacity=('0')
+            document.getElementById('songInput').style.display=('block')
+        },
+      submitFav: function (e) {
+                e.preventDefault()
+                console.log('submitting favourite', this.favourite);
+                fetch('http://localhost:4000/add/favourite', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        song: this.favourite.song,
+                        artist: this.favourite.artist,
+                        album: this.favourite.album,
+                        emailAddress: this.emailAddress
+                    })
+                })
+                 .then(res => console.log(`status: ${res.status}`))
+                // this.closeFav();
+                // const contentH1 = document.getElementById('addContentTitle');
+                // contentH1.innerHTML = "You've shared an artist!";
+                // setTimeout(() => {
+                //     contentH1.innerHTML = "Recommend others some music!";
+                // }, 4000);
+                // this.resetForm();
         }
-    } 
+    }
 };
 </script>
 
@@ -249,5 +318,26 @@ import { decodeCredential } from 'vue3-google-login'
 #backToHome:hover {
     color: #dec9ab;
     transform: scale(1.05);
+}
+
+.inputs {
+    width: 20vmin;
+    height: 5vmin;
+    text-align: center;
+    font-size: 2.5vmin;
+    display: none;
+    position: absolute;
+}
+
+#songInput {
+    top: 42.75vmin;
+}
+
+#artistInput {
+    top: 60.25vmin;
+}
+
+#albumInput {
+    top: 77.75vmin;
 }
 </style>
