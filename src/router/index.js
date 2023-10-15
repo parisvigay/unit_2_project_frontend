@@ -5,6 +5,7 @@ import AddContent from '../components/AddContent'
 import ProfileView from '../components/ProfileView'
 import SocialView from '../components/SocialView'
 import UpdateFavourite from '../components/UpdateFavourite'
+import UserProfiles from '../components/UserProfiles'
 
 const routes = [
     {
@@ -35,7 +36,12 @@ const routes = [
         name: 'UpdateFavourite',
         path: '/home/update-favourite',
         component: UpdateFavourite
-    } 
+    },
+    {
+        name: 'UserProfiles',
+        path: '/home/user-profiles',
+        component: UserProfiles
+    }
 ]
 const router = createRouter({
 	history: createWebHistory(),
