@@ -48,16 +48,16 @@
         }),
         async mounted() {
             try {
-                const responseSongs = await fetch('http://localhost:4000/songs')
+                const responseSongs = await fetch(`${process.env.VUE_APP_BACKEND_URL}/songs`)
                 const songs = await responseSongs.json()
                 this.song=songs
                 console.log('songs', songs);
-                const responseArtists = await fetch('http://localhost:4000/artists')
+                const responseArtists = await fetch(`${process.env.VUE_APP_BACKEND_URL}/artists`)
                 const artists = await responseArtists.json()
                 const filteredArtists = artists.filter(artist => artist.isArtist ===true)
                 this.artist = filteredArtists
                 console.log('artists', artists);
-                const responseAlbums = await fetch('http://localhost:4000/albums')
+                const responseAlbums = await fetch(`${process.env.VUE_APP_BACKEND_URL}/albums`)
                 const albums = await responseAlbums.json()
                 this.album=albums
                 console.log('albums', albums);
@@ -71,7 +71,7 @@
             this.$router.push('/home');
         },
         delete() {
-            fetch(`http://localhost:4000/delete-song/${this.song._id}`)
+            fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-song/${this.song._id}`)
         }
     }  
 };

@@ -46,7 +46,7 @@ import { decodeCredential, googleLogout } from 'vue3-google-login'
         this.userName = userData.given_name
         this.emailAddress = userData.email
         this.$cookies.set('user_session', response.credential)
-        fetch('http://localhost:4000/add/user', {
+        fetch(`${process.env.VUE_APP_BACKEND_URL}/add/user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

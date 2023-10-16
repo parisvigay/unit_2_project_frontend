@@ -62,9 +62,9 @@ import { decodeCredential } from 'vue3-google-login'
         },
         editFav() {
     if (this.favourite.id) {
-        fetch(`http://localhost:4000/favourites/${this.favourite.id}`, {  // A user submitting their favourites for the
-            method: 'PUT',                                                // first time = a POST request
-            headers: {                                                    // From then, it is a PUT request
+        fetch(`${process.env.VUE_APP_BACKEND_URL}/favourites/${this.favourite.id}`, {  // A user submitting their favourites for the
+            method: 'PUT',                                                            // first time = a POST request
+            headers: {                                                                // From then, it is a PUT request
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -79,7 +79,7 @@ import { decodeCredential } from 'vue3-google-login'
         })
         .catch(err => console.log(err));
     } else {
-            fetch('http://localhost:4000/add/favourite', {
+            fetch(`${process.env.VUE_APP_BACKEND_URL}/add/favourite`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

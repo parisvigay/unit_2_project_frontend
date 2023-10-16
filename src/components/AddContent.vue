@@ -153,7 +153,7 @@ import { decodeCredential } from 'vue3-google-login'
                     alert("Please input a valid genre");
                     return;
                 }
-                fetch('http://localhost:4000/add/song', {
+                fetch(`${process.env.VUE_APP_BACKEND_URL}/add/song`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -216,7 +216,7 @@ import { decodeCredential } from 'vue3-google-login'
                 //     alert("Please input a valid image URL");
                 //     return;
                 // }
-                fetch('http://localhost:4000/add/artist', {
+                fetch(`${process.env.VUE_APP_BACKEND_URL}/add/artist`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -259,7 +259,7 @@ import { decodeCredential } from 'vue3-google-login'
                     alert("Please input a valid genre");
                     return;
                 }
-                fetch('http://localhost:4000/add/album', {
+                fetch(`${process.env.VUE_APP_BACKEND_URL}/add/album`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

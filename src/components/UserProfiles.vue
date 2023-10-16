@@ -23,7 +23,7 @@ export default {
     favourites: []
   }),
   mounted() {
-      fetch('http://localhost:4000/all-favourites')
+      fetch(`${process.env.VUE_APP_BACKEND_URL}/all-favourites`)
         .then((response) => response.json())
         .then((data) => {
         this.favourites = data;

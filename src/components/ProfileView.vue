@@ -63,7 +63,7 @@ export default {
       const userData = decodeCredential(this.$cookies.get('user_session'));
       this.userName = userData.given_name;
       this.emailAddress = userData.email;
-      fetch(`http://localhost:4000/favourites?emailAddress=${this.emailAddress}`)
+      fetch(`${process.env.VUE_APP_BACKEND_URL}/favourites?emailAddress=${this.emailAddress}`)
         .then((response) => response.json())
         .then((data) => {
         this.getFavourite = data;
