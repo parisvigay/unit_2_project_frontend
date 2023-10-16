@@ -115,6 +115,7 @@
     color: #097969;
     background-color: #EADDCA;
     min-height: 40vmin;
+    height: 40vmin;
     min-width: 40vmin;
     border-radius: 2.5%;
     border: 0.5vmin solid #2c3e50;
