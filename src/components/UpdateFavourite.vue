@@ -42,7 +42,7 @@ import { decodeCredential } from 'vue3-google-login'
         this.userName = userData.given_name
         this.emailAddress = userData.email
       }
-    fetch(`http://localhost:4000/favourites?emailAddress=${this.emailAddress}`)
+    fetch(`${process.env.VUE_APP_BACKEND_URL}/favourites?emailAddress=${this.emailAddress}`)
         .then(result => result.json())
         .then(data => {
             if (data && data.length > 0) {
