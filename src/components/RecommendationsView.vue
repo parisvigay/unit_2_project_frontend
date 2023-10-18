@@ -1,10 +1,10 @@
 <template>
-    <div id="socialMain">
-        <svg id="backToHome" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" @click="toHome">
+    <div id="recommendationsMain">
+        <svg id="backToSocial" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" @click="toSocial">
         <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
         <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
         </svg>
-        <h1 id="socialTitle" >See what others are recommending!</h1>
+        <h1 id="recommendationsTitle" >See what others are recommending!</h1>
         <div id="recommendationsContainer">
             <div v-for="s in song" :key="s._id" id="songRecommendations" class="recommendations">
                 <h3>Song</h3>
@@ -39,7 +39,7 @@
 
 <script>
  export default {
-        name: 'SocialView',
+        name: 'RecommendationsView',
         data: () => ({
         error: '',
         song: [],
@@ -67,8 +67,8 @@
             }
         },
         methods: {
-        toHome: function() {
-            this.$router.push('/home');
+        toSocial: function() {
+            this.$router.push('/home/social');
         },
         delete() {
             fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-song/${this.song._id}`)
@@ -78,7 +78,7 @@
 </script>
 
 <style>
-#socialMain {
+#recommendationsMain {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,7 +86,7 @@
     height: 100vh;
 }
 
-#socialTitle {
+#recommendationsTitle {
     font-size: 6vmin;
     color: #EADDCA;
     text-shadow: 0.5vmin 0.5vmin #2c3e50;
@@ -94,7 +94,7 @@
     top: 10vmin;
 }
 
-#backToHome {
+#backToSocial {
     align-self: flex-end;
     margin-left: 4vmin;
     position: absolute;
@@ -105,7 +105,7 @@
     color: #EADDCA;
 }
 
-#backToHome:hover {
+#backToSocial:hover {
     color: #dec9ab;
     transform: scale(1.05);
 }

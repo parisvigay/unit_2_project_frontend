@@ -3,7 +3,8 @@ import NavView from '../components/NavView'
 import HomeView from '../components/HomeView'
 import AddContent from '../components/AddContent'
 import ProfileView from '../components/ProfileView'
-import SocialView from '../components/SocialView'
+import SocialPage from '../components/SocialPage'
+import RecommendationsView from '../components/RecommendationsView'
 import UpdateFavourite from '../components/UpdateFavourite'
 import UserProfiles from '../components/UserProfiles'
 
@@ -28,9 +29,14 @@ const routes = [
         path: '/home/profile',
         component: ProfileView
     },
-    {   name: 'SocialView',
+    {
+        name: 'SocialPage',
         path: '/home/social',
-        component: SocialView
+        component: SocialPage
+    },
+    {   name: 'RecommendationsView',
+        path: '/home/social/recommendations',
+        component: RecommendationsView
     },
     {
         name: 'UpdateFavourite',
@@ -39,7 +45,7 @@ const routes = [
     },
     {
         name: 'UserProfiles',
-        path: '/home/user-profiles',
+        path: '/home/social/user-profiles',
         component: UserProfiles
     }
 ]
