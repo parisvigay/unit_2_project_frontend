@@ -5,23 +5,18 @@
         <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
     </svg>
     <div id="profilesContainer">
-      <!-- <div id="infoCardContainer"> -->
-          <div v-for="f in favourites" :key="f._id" id="favProfiles" class="infoCardAll">
-              <p>User: <br>{{ f.user.emailAddress }}</p>
-              <p id="favSong">Favourite Song: {{ f.song }}</p>
-              <p id="favArtist">Favourite Artist: {{ f.artist }}</p>
-              <p id="favAlbum">Favourite Album: {{ f.album }}</p>
-          </div>
-          <!-- <div v-for="f in favourites" :key="f._id"  id="answer" class="infoCard">
-              <p>Song: {{ f.song }}</p>
-              <p>Artist: {{ f.artist }}</p>
-              <p>Album: {{ f.album }}</p>
-              <p>User: {{ f.user }}</p>
-          </div> -->
-      <!-- </div> -->
+      <div v-for="f in favourites" :key="f._id" id="favProfiles" class="infoCardAll">
+          <!-- Use v-if to conditionally render user's email -->
+          <p v-if="f.user" class="user-email">User: <br>{{ f.user.emailAddress }}</p>
+          <!-- Add additional conditional rendering for other data -->
+          <p id="favSong">Favourite Song: {{ f.song }}</p>
+          <p id="favArtist">Favourite Artist: {{ f.artist }}</p>
+          <p id="favAlbum">Favourite Album: {{ f.album }}</p>
+      </div>
     </div>   
-  </div>  
-   </template>
+  </div>
+</template>
+
   
 
 <script>
