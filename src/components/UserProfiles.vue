@@ -73,6 +73,7 @@ export default {
     background-color: #e5d3bb;
     border: 0.5vmin solid #2c3e50;
     border-radius: 2.5%;
+    box-shadow: 1vmin 1vmin #076154;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

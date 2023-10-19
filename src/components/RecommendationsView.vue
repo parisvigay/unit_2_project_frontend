@@ -13,7 +13,7 @@
                 <p>Year: {{ s.year }}</p>    
                 <p>Genre: {{ s.genre }}</p>   
                 <p>Recommended by: {{ s.user.emailAddress }}</p>
-                <!-- <button class="delete" @click="delete">Delete</button>      -->
+                <button class="delete" @click="deleteSong(s)" :style="{ opacity: userTrueSong(s) ? 1 : 0 }">Delete</button>
             </div>
             <div v-for="a in artist" :key="a._id" id="artistRecommendations" class="recommendations">
                 <h3 id="artistH3">Artist</h3>
@@ -22,7 +22,7 @@
                 <p>Genre: {{ a.genre }}</p>    
                 <p>Active?: {{ a.active }}</p>     
                 <p id="lastP">Recommended by: {{ a.user.emailAddress }}</p>
-                <!-- <button class="delete" @click="delete">Delete</button>      -->
+                <button id="artistDelete" class="delete" @click="deleteArtist(a)" :style="{ opacity: userTrueArtist(a) ? 1 : 0 }">Delete</button>
             </div>
             <div v-for="a in album" :key="a._id" id="albumRecommendations" class="recommendations">
                 <h3>Album</h3>
@@ -31,51 +31,119 @@
                 <p>Year: {{ a.year }}</p>    
                 <p>Genre: {{ a.genre }}</p>   
                 <p>Recommended by: {{ a.user.emailAddress }}</p>
-                <!-- <button class="delete" @click="delete">Delete</button>      -->
+                <button class="delete" @click="deleteAlbum(a)" :style="{ opacity: userTrueAlbum(a) ? 1 : 0 }">Delete</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
- export default {
-        name: 'RecommendationsView',
-        data: () => ({
-        error: '',
-        song: [],
-        artist: [],
-        album: []
-        }),
-        async mounted() {
-            try {
-                const responseSongs = await fetch(`${process.env.VUE_APP_BACKEND_URL}/songs`)
-                const songs = await responseSongs.json()
-                this.song=songs
-                console.log('songs', songs);
-                const responseArtists = await fetch(`${process.env.VUE_APP_BACKEND_URL}/artists`)
-                const artists = await responseArtists.json()
-                const filteredArtists = artists.filter(artist => artist.isArtist ===true)
-                this.artist = filteredArtists
-                console.log('artists', artists);
-                const responseAlbums = await fetch(`${process.env.VUE_APP_BACKEND_URL}/albums`)
-                const albums = await responseAlbums.json()
-                this.album=albums
-                console.log('albums', albums);
-            }
-            catch (err) {
-                console.log(err);
-            }
+import { decodeCredential } from 'vue3-google-login';
+
+export default {
+  name: 'RecommendationsView',
+  data: () => ({
+    error: '',
+    song: [],
+    artist: [],
+    album: [],
+    isLoggedIn: false,
+    userName: '',
+    emailAddress: '',
+  }),
+  async mounted() {
+    try {
+      if (this.$cookies.isKey('user_session')) {
+        this.isLoggedIn = true;
+        const userSession = this.$cookies.get('user_session');
+        const userData = decodeCredential(userSession);
+        this.emailAddress = userData.email;
+
+        // Fetch songs
+        const songsResponse = await fetch(`${process.env.VUE_APP_BACKEND_URL}/songs`);
+        const songs = await songsResponse.json();
+        this.song = songs;
+
+        // Fetch artists
+        const artistsResponse = await fetch(`${process.env.VUE_APP_BACKEND_URL}/artists`);
+        const artists = await artistsResponse.json();
+        const filteredArtists = artists.filter(artist => artist.isArtist === true);
+        this.artist = filteredArtists;
+
+        // Fetch albums
+        const albumsResponse = await fetch(`${process.env.VUE_APP_BACKEND_URL}/albums`);
+        const albums = await albumsResponse.json();
+        this.album = albums;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  methods: {
+    toSocial: function() {
+      this.$router.push('/home/social');
+    },
+    deleteSong(song) {
+    fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-song/${song._id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
         },
-        methods: {
-        toSocial: function() {
-            this.$router.push('/home/social');
-        },
-        delete() {
-            fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-song/${this.song._id}`)
+    })
+    .then(res => {
+        if (res.status === 204) {
+            // If the item was deleted, remove it from the data array
+            this.song = this.song.filter(item => item._id !== song._id);
         }
-    }  
+    })
+    .catch(err => console.log(err));
+    },
+
+    deleteArtist(artist) {
+        fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-artist/${artist._id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(res => {
+            if (res.status === 204) {
+                // If the item was deleted, remove it from the data array
+                this.artist = this.artist.filter(item => item._id !== artist._id);
+            }
+        })
+        .catch(err => console.log(err));
+    },
+
+    deleteAlbum(album) {
+        fetch(`${process.env.VUE_APP_BACKEND_URL}/delete-album/${album._id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+         },
+        })
+        .then(res => {
+        if (res.status === 204) {
+            // If the item was deleted, remove it from the data array
+            this.album = this.album.filter(item => item._id !== album._id);
+        }
+        })
+        .catch(err => console.log(err));
+    },
+
+    userTrueSong(song) {
+      return song.user.emailAddress === this.emailAddress;
+    },
+    userTrueArtist(artist) {
+      return artist.user.emailAddress === this.emailAddress;
+    },
+    userTrueAlbum(album) {
+      return album.user.emailAddress === this.emailAddress;
+    },
+  },
 };
 </script>
+
 
 <style>
 #recommendationsMain {
@@ -114,9 +182,9 @@
     font-size: 2vmin;
     color: #097969;
     background-color: #EADDCA;
-    min-height: 40vmin;
+    min-height: 45vmin;
     height: 40vmin;
-    min-width: 40vmin;
+    min-width: 42vmin;
     border-radius: 2.5%;
     border: 0.5vmin solid #2c3e50;
     box-shadow: 1vmin 1vmin #076154;
@@ -146,5 +214,22 @@
 
 #artistName {
     margin-bottom: -0.25vmin;
+}
+
+#artistDelete {
+    margin-bottom: 0.5vmin;
+}
+
+.delete {
+    height: 4vmin;
+    width: 8vmin;
+    font-size: 2vmin;
+    border-radius: 5%;
+    background-color: seashell;
+}
+
+.delete:hover {
+    background-color: lightyellow;
+    transform: scale(1.05);
 }
 </style>
