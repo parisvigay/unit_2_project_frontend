@@ -148,6 +148,16 @@ import { decodeCredential } from 'vue3-google-login'
 }
 
 #updateSubmitBtn {
+    height: 4vmin;
+    width: 8vmin;
+    background-color: seashell;
+    font-size: 2vmin;
+    border-radius: 5%;
     margin-top: 5vmin;
+}
+
+#updateSubmitBtn:hover {
+    background-color: lightyellow;
+    transform: scale(1.05);
 }
 </style>
