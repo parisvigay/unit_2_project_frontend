@@ -42,7 +42,7 @@
                         <input id="input" type="text" v-model="artist.name" name="title" placeholder="Name" required>
                         <input id="input" type="text" v-model="artist.genre" name="artist" placeholder="Genre/s" required>
                         <input id="input" type="text" v-model="artist.active" name="active" placeholder="Active? (Yes/No)" required>
-                        <input id="lastInput" type="text" v-model="artist.image" name="image" placeholder="(Image URL)" required>
+                        <input id="lastInput" type="text" v-model="artist.image" name="image" placeholder="(Copy image address)" required>
                     </section>
                 </form>
             </div>
@@ -73,10 +73,10 @@
 <script>
 
 const titleOrNameRegex = /\w\s*/;
-const yearRegex = /\d{4,4}/;
+const yearRegex =  /^\d{4}$/;
 const genreRegex = /^[A-Za-z\s,&]*$/;
-const activeRegex = /[Yy]es|[Nn]o/;
-// const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
+const activeRegex = /\b(?:[Yy]es|[Nn]o)\b/;
+const imageRegex = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gmi
 
 import { decodeCredential } from 'vue3-google-login'
 
@@ -212,10 +212,10 @@ import { decodeCredential } from 'vue3-google-login'
                     alert("Please input a valid answer");
                     return;
                 }
-                // if (!imageRegex.test(this.artist.image)) {
-                //     alert("Please input a valid image URL");
-                //     return;
-                // }
+                if (!imageRegex.test(this.artist.image)) {
+                    alert("Please input a valid image URL");
+                    return;
+                }
                 fetch(`${process.env.VUE_APP_BACKEND_URL}/add/artist`, {
                     method: "POST",
                     headers: {

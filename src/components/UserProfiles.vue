@@ -70,7 +70,7 @@ export default {
 }
 
 #favProfiles {
-    background-color: #e5d3bb;
+    background-color: #EADDCA;
     border: 0.5vmin solid #2c3e50;
     border-radius: 2.5%;
     box-shadow: 1vmin 1vmin #076154;

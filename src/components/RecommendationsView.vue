@@ -13,7 +13,7 @@
                 <p>Year: {{ s.year }}</p>    
                 <p>Genre: {{ s.genre }}</p>   
                 <p>Recommended by: {{ s.user.emailAddress }}</p>
-                <button class="delete" @click="deleteSong(s)" :style="{ opacity: userTrueSong(s) ? 1 : 0 }">Delete</button>
+                <button class="delete" @click="deleteSong(s)" :disabled="!userTrueSong(s)">Delete</button>
             </div>
             <div v-for="a in artist" :key="a._id" id="artistRecommendations" class="recommendations">
                 <h3 id="artistH3">Artist</h3>
@@ -22,7 +22,7 @@
                 <p>Genre: {{ a.genre }}</p>    
                 <p>Active?: {{ a.active }}</p>     
                 <p id="lastP">Recommended by: {{ a.user.emailAddress }}</p>
-                <button id="artistDelete" class="delete" @click="deleteArtist(a)" :style="{ opacity: userTrueArtist(a) ? 1 : 0 }">Delete</button>
+                <button id="artistDelete" class="delete" @click="deleteArtist(a)" :disabled="!userTrueArtist(a)">Delete</button>
             </div>
             <div v-for="a in album" :key="a._id" id="albumRecommendations" class="recommendations">
                 <h3>Album</h3>
@@ -31,7 +31,7 @@
                 <p>Year: {{ a.year }}</p>    
                 <p>Genre: {{ a.genre }}</p>   
                 <p>Recommended by: {{ a.user.emailAddress }}</p>
-                <button class="delete" @click="deleteAlbum(a)" :style="{ opacity: userTrueAlbum(a) ? 1 : 0 }">Delete</button>
+                <button class="delete" @click="deleteAlbum(a)" :disabled="!userTrueAlbum(a)">Delete</button>
             </div>
         </div>
     </div>
@@ -231,5 +231,10 @@ export default {
 .delete:hover {
     background-color: lightyellow;
     transform: scale(1.05);
+}
+
+.delete:disabled:hover {
+    background-color: seashell;
+    transform: scale(1);
 }
 </style>
